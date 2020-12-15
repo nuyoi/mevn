@@ -13,7 +13,7 @@
           Sign up to your account
         </h2>
       </div>
-      <form class="mt-8 space-y-6" action="#" method="POST">
+      <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
         <div>
           <label for="user-name" class="sr-only">User name</label>
           <input
@@ -70,7 +70,6 @@
         <div>
           <button
             type="submit"
-            @click.prevent="onSubmit"
             class="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md group hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Sign up
@@ -82,6 +81,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -94,7 +94,18 @@ export default {
     };
   },
   methods: {
-    onSubmit() {},
+    async onSubmit() {
+      try {
+        await axios.post("http://localhost:3000/auth/signup", {
+          email: this.form.email,
+          password: this.form.password,
+          name: this.form.name,
+        });
+        this.$router.push({ path: "/login" });
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>
